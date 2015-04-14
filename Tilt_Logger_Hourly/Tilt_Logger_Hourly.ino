@@ -1,24 +1,49 @@
+/*
+	Tilt_Logger_Hourly
+
+	This sketch logs data from an attached tilt meter and GPS unit. Log
+        files change every hour and are stamped per the convention below.
+        The wildfire board was used for its two serial ports and watchdog timer
+        capability. The GPS comes from the Adafruit Ultimate GPS logger shield. 
+        We use the SD card on that shield as well, just because of the way things
+        mount in the housing. See the repository readme for more hardware description.
+
+	The circuit:
+	* list the components attached to each input
+	* list the components attached to each output
+
+	Created 14 04 2015
+	By John R. Leeman
+	Modified 14 04 2015
+	By John R. Leeman
+
+	https://github.com/jrleeman/WildfireTiltLogger
+
+*/
+
 #include <WildFire.h>
 #include <SPI.h>
 #include <SD.h>
 #include <TinyGPS.h>
 
-File logfile;
-
-char tiltBuffer[100];
 uint8_t index = 0;
-WildFire wildfire;
-boolean writeTilt = false;
-TinyGPS gps;
+// Holds current hour, 99 forces us to start a new log at first GPS lock
+int current_hour = 99; 
+char tiltBuffer[100];
+boolean writeTilt = false; // State variable for when we are ready to log
 
-int current_hour = 99;
+File logfile;
+TinyGPS gps;
+WildFire wildfire;
 
 void setup() {
   wildfire.begin();
-  
+
+  // Start up the serial port 
   Serial.begin(9600);
   Serial1.begin(9600);
   
+  // Setup the tilt meter
   delay(3000);
   int bytesSent = Serial.write("*9900XY-SET-BAUDRATE,9600\n"); // Set baudrate on tilt meter
   delay(1000);
@@ -27,11 +52,15 @@ void setup() {
   bytesSent += Serial.write("*9900XYC2\n"); // Set to 1 Hz output
   delay(5000);
   
+  // TODO: Add GPS setup verification here
+  
+  // Setup and start the SD card
   pinMode(10, OUTPUT);
   SD.begin(10, 11, 12, 13);
-  
   delay(1000);
   
+  // Dump the serial buffer to trash all of the crap the 
+  // tilt meter tells us about our commands and such.
   while (Serial.available() > 0) {
     Serial.read();
   }
@@ -39,16 +68,19 @@ void setup() {
 }
 
 void loop() {
+  
+  // Read a GPS sentence if there is one avaliable
   bool newData = false;
    while (Serial1.available())
     {
       char c = Serial1.read();
-      // Serial.write(c); // uncomment this line if you want to see the GPS data flowing
       if (gps.encode(c)) // Did a new valid sentence come in?
         newData = true;
     }
+  // Done with reading the GPS 
     
-  // Grab any serial from the Tiltmeter and store it
+  // Grab any serial from the Tiltmeter and store it, while we are
+  // at it, we'll dump the $ and spaces that are in the output
   while (Serial.available() > 0) {
     if (index < 100) {
       char inChar = Serial.read();
