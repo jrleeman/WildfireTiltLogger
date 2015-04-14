@@ -22,19 +22,19 @@ void setup() {
   delay(3000);
   int bytesSent = Serial.write("*9900XY-SET-BAUDRATE,9600\n"); // Set baudrate on tilt meter
   delay(1000);
-  bytesSent += Serial.write("*9900SO-SO\n"); // Set to NMEA XDR format
+  bytesSent += Serial.write("*9900SO-SIM\n"); // Set to NMEA XDR format
   delay(1000);
   bytesSent += Serial.write("*9900XYC2\n"); // Set to 1 Hz output
-  delay(2000);
+  delay(5000);
   
   pinMode(10, OUTPUT);
   SD.begin(10, 11, 12, 13);
   
-  logfile = SD.open("LOG.TXT", FILE_WRITE);
-  
-  logfile.write("YYYY-MM-DDTHH:MM:SS,NUM_SATELLITES,LATITUDE,LONGITUDE,ALTITUDE,X_TILT,Y_TILT,TEMPERATURE,SERIAL_NUMBER,EVT_MARKER\n");
-  
   delay(1000);
+  
+  while (Serial.available() > 0) {
+    Serial.read();
+  }
 
 }
 
@@ -54,8 +54,10 @@ void loop() {
       char inChar = Serial.read();
       if (inChar == '$')
         inChar = ',';
-      tiltBuffer[index] = inChar;
-      index++;
+      if (inChar != ' '){
+        tiltBuffer[index] = inChar;
+        index++;
+      }
       if (inChar == '\n'){
         writeTilt = true;
         index = 0;
@@ -95,7 +97,7 @@ void loop() {
         int dummy = 0;
       }
       current_hour = hour;
-      logfile.write("YYYY-MM-DDTHH:MM:SS,NUM_SATELLITES,LATITUDE,LONGITUDE,ALTITUDE,X_TILT,Y_TILT,TEMPERATURE,SERIAL_NUMBER,EVT_MARKER\n");
+      logfile.write("YYYY-MM-DDTHH:MM:SS,NUM_SATELLITES,LATITUDE,LONGITUDE,ALTITUDE,X_TILT,Y_TILT,TEMPERATURE,SERIAL_NUMBER\n");
     }
     
     char sz[32];
