@@ -83,12 +83,17 @@ void setup() {
   SD.begin(10, 11, 12, 13);
   delay(1000);
   
+    // Dump the serial buffer to trash all of the crap the 
+  // tilt meter tells us about our commands and such.
+  while (Serial1.available() > 0) {
+    Serial1.read();
+  }
+
   // Dump the serial buffer to trash all of the crap the 
   // tilt meter tells us about our commands and such.
   while (Serial.available() > 0) {
     Serial.read();
   }
-
 }
 
 void loop() {
@@ -122,7 +127,8 @@ void loop() {
     
     // SEND CALL
     Serial.println("*9900XY"); // Set call/response mode
-    delay(300);
+    Serial.flush();
+    delay(500); // Give the tilt meter a chance to start responding, 800 causes skips sometimes 
     // Grab any serial from the Tiltmeter and store it, while we are
     // at it, we'll dump the $ and spaces that are in the output
     while (Serial.available() > 0) {
