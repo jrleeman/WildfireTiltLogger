@@ -32,10 +32,12 @@
 #include <TinyGPS.h>
 
 uint8_t index = 0; // Buffer index
+uint8_t ngps = 0; // nubmer GPS sentences
 int current_hour = 99; // 99 forces us to start a new log at first GPS lock
 char tiltBuffer[100];
 boolean writeTilt = false; // State variable for when we are ready to log
 int current_second = 99;
+int current_day = 999;
 boolean getTilt = false;
 
 File logfile;
@@ -99,13 +101,17 @@ void loop() {
       
       // Did a new valid sentence come in?
       if (gps.encode(c)) { 
-        
+        ngps +=1;
+      }
+      if (ngps == 2){  
+        ngps = 0;
         // Open up the date and time. See if the second has changed since the last valid message.
         // If so, let's go get new tilt measurements!
         gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
         if (second != current_second){
           newData = true;
           current_second = second;
+          current_day = day;
         }
       }
     }
