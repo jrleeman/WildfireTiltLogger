@@ -65,6 +65,8 @@ void setup() {
   delay(1000);
   bytesSent += Serial.println("*9900SO-SIM"); // Set to NMEA XDR format
   delay(1000);
+  bytesSent += Serial.println("*9900XY-SET-N-SAMP,100"); // Set to NMEA XDR format
+  delay(1000);
   bytesSent += Serial.println("*9900XYC-OFF"); // Set call/response mode
   delay(5000);
   
@@ -82,22 +84,21 @@ void setup() {
   pinMode(10, OUTPUT);
   SD.begin(10, 11, 12, 13);
   delay(1000);
-  
-    // Dump the serial buffer to trash all of the crap the 
-  // tilt meter tells us about our commands and such.
-  while (Serial1.available() > 0) {
-    Serial1.read();
-  }
 
   // Dump the serial buffer to trash all of the crap the 
   // tilt meter tells us about our commands and such.
   while (Serial.available() > 0) {
     Serial.read();
   }
+  
+  // Dump the serial buffer to trash all of the crap the 
+  // tilt meter tells us about our commands and such.
+  while (Serial1.available() > 0) {
+    Serial1.read();
+  }
 }
 
 void loop() {
-  
   // Read a GPS sentence if there is one avaliable
   bool newData = false;
    while (Serial1.available())
@@ -128,7 +129,8 @@ void loop() {
     // SEND CALL
     Serial.println("*9900XY"); // Set call/response mode
     Serial.flush();
-    delay(500); // Give the tilt meter a chance to start responding, 800 causes skips sometimes 
+    delay(350); // Give the tilt meter a chance to start responding, 800 causes skips sometimes 
+    
     // Grab any serial from the Tiltmeter and store it, while we are
     // at it, we'll dump the $ and spaces that are in the output
     while (Serial.available() > 0) {
@@ -141,6 +143,10 @@ void loop() {
         if (inChar != ' '){
           tiltBuffer[index] = inChar;
           index++;
+        }
+        
+        if (inChar == '\n'){
+          break;
         }
       }
     }
@@ -172,6 +178,10 @@ void loop() {
     // Write out the tilt data and flush the write buffer
     logfile.write(tiltBuffer);
     logfile.flush();  
+    
+    for( int i = 0; i < sizeof(tiltBuffer);  ++i ) {
+      tiltBuffer[i] = (char)0;
+    }
   }
 }
 
