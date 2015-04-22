@@ -10,21 +10,18 @@
 
 	Created 14 04 2015
 	By John R. Leeman
-	Modified 14 04 2015
+	Modified 22 04 2015
 	By John R. Leeman
 
 	https://github.com/jrleeman/WildfireTiltLogger
 
 */
 
-// DEV NOTES:
-// - Master works and is logging as of about noon April 14
-// - This code has not been tested, but shouldn't cause any 
-//   major issues. Maybe just by putting the file logger
-//   new file in a function we could break.Maybe I need to figure out
-//   how to return the file object? Testing will tell. 
-// - The GPS setup stuff should be tested, it didn't seem to work
-//   a few nights ago when I was playing with it.
+// TODO:
+// - Add watchdog
+// - Reimplement error checking
+// - Reimplement status lights
+// - Add newline after GPS if no tilt data and throw error light
 
 #include <WildFire.h>
 #include <SPI.h>
