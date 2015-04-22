@@ -16,7 +16,7 @@
 	https://github.com/jrleeman/WildfireTiltLogger
 
 */
-// Tested working code 9:05 AM 4/22/15
+// Tested working code 10:10 AM 4/22/15
 // TODO:
 // - Add watchdog
 // - Reimplement error checking
@@ -62,23 +62,23 @@ void setup() {
   
   wildfire.begin();
 
-  // Start up the serial port 
+  // Start up the serial ports 
   Serial.begin(9600);
   Serial1.begin(9600);
   
   // Setup the tilt meter
   delay(3000);
-  int bytesSent = Serial.println("*9900SE"); // Disable Echo
+  Serial.println("*9900SE"); // Disable Echo
   delay(1000);
-  bytesSent = Serial.println("*9900TR-SP"); // Disable power on message
+  Serial.println("*9900TR-SP"); // Disable power on message
   delay(1000);
-  bytesSent = Serial.println("*9900XY-SET-BAUDRATE,9600"); // Set baudrate on tilt meter
+  Serial.println("*9900XY-SET-BAUDRATE,9600"); // Set baudrate on tilt meter
   delay(1000);
-  bytesSent += Serial.println("*9900SO-SIM"); // Set to NMEA XDR format
+  Serial.println("*9900SO-SIM"); // Set to simple output format
   delay(1000);
-  bytesSent += Serial.println("*9900XY-SET-N-SAMP,100"); // Set to NMEA XDR format
+  Serial.println("*9900XY-SET-N-SAMP,100"); // Set to average of 100 samples for output
   delay(1000);
-  bytesSent += Serial.println("*9900XYC-OFF"); // Set call/response mode
+  Serial.println("*9900XYC-OFF"); // Set call/response mode
   delay(5000);
   
   // Setup the GPS Parameters
@@ -117,7 +117,7 @@ void setup() {
   }
   
   // Dump the serial buffer to trash all of the crap the 
-  // tilt meter tells us about our commands and such.
+  // GPS has sent since we started the setup routine.
   while (Serial1.available() > 0) {
     Serial1.read();
   }
@@ -193,7 +193,10 @@ void loop() {
     char sz[32];
     sprintf(sz, "%04d-%02d-%02dT%02d:%02d:%02d,%02d,",
         year, month, day, hour, minute, second, gps.satellites());
-    logfile.write(sz);
+    uint8_t stringsize = strlen(sz);
+    if (stringsize != logfile.write(sz)){
+      error(4);
+    }
     log_float(flat, TinyGPS::GPS_INVALID_F_ANGLE, 10, 6);
     logfile.write(",");
     log_float(flon, TinyGPS::GPS_INVALID_F_ANGLE, 11, 6);
@@ -201,7 +204,10 @@ void loop() {
     log_float(gps.f_altitude(), TinyGPS::GPS_INVALID_F_ALTITUDE, 7, 2);
     
     // Write out the tilt data and flush the write buffer
-    logfile.write(tiltBuffer);
+    stringsize = strlen(tiltBuffer);
+    if (stringsize != logfile.write(tiltBuffer)){
+      error(4);
+    }
     logfile.flush();  
     
     for( int i = 0; i < sizeof(tiltBuffer);  ++i ) {
@@ -226,8 +232,7 @@ void start_new_logfile(int day, int month, int year, int hour){
   // Open the new file and set the current hour to the new hour
   logfile = SD.open(name, FILE_WRITE);
   if( ! logfile ) {
-    //error(1);
-    int dummy = 0;
+    error(1);
   }
   current_hour = hour;
   logfile.write("YYYY-MM-DDTHH:MM:SS,NUM_SATELLITES,LATITUDE,LONGITUDE,ALTITUDE,X_TILT,Y_TILT,TEMPERATURE,SERIAL_NUMBER\n");
