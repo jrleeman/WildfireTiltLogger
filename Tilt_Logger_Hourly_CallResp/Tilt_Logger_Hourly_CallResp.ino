@@ -207,7 +207,12 @@ void loop() {
       error(4);
     }
     if (stringsize < 1){
+      digitalWrite(REDLED,HIGH);
+      digitalWrite(GRNLED,HIGH);
       logfile.write(",-9999.99,-9999.99,-99.99,99999\r\n");
+      delay(10);
+      digitalWrite(REDLED,LOW);
+      digitalWrite(GRNLED,LOW);
     }
     logfile.flush();  
     
