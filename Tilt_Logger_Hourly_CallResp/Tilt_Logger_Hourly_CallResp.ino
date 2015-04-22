@@ -16,11 +16,9 @@
 	https://github.com/jrleeman/WildfireTiltLogger
 
 */
-// Tested working code 10:10 AM 4/22/15
+// Tested working code 10:32 AM 4/22/15
 // TODO:
 // - Add watchdog
-// - Reimplement error checking
-// - Reimplement status lights
 // - Add newline after GPS if no tilt data and throw error light
 
 #include <WildFire.h>
@@ -207,6 +205,9 @@ void loop() {
     stringsize = strlen(tiltBuffer);
     if (stringsize != logfile.write(tiltBuffer)){
       error(4);
+    }
+    if (stringsize < 1){
+      logfile.write(",-9999.99,-9999.99,-99.99,99999\r\n");
     }
     logfile.flush();  
     
