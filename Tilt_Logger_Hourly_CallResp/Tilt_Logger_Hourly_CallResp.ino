@@ -16,7 +16,7 @@
 	https://github.com/jrleeman/WildfireTiltLogger
 
 */
-
+// Tested working code 9:05 AM 4/22/15
 // TODO:
 // - Add watchdog
 // - Reimplement error checking
@@ -27,6 +27,11 @@
 #include <SPI.h>
 #include <SD.h>
 #include <TinyGPS.h>
+
+// Variables and defines
+#define chipSelect 10
+#define REDLED 4
+#define GRNLED 5
 
 uint8_t index = 0; // Buffer index
 uint8_t ngps = 0; // nubmer GPS sentences
@@ -46,6 +51,15 @@ byte month, day, hour, minute, second, hundredths;
 unsigned long age;
 
 void setup() {
+  // Setup the LED pins and the CS pin for the SD card as output
+  pinMode(REDLED, OUTPUT);
+  pinMode(GRNLED, OUTPUT);
+  pinMode(10, OUTPUT);
+  
+  // Turn on the LEDs to show that we are in setup
+  digitalWrite(REDLED, HIGH);
+  digitalWrite(GRNLED, HIGH);
+  
   wildfire.begin();
 
   // Start up the serial port 
@@ -78,9 +92,23 @@ void setup() {
   delay(1000);
   
   // Setup and start the SD card
-  pinMode(10, OUTPUT);
-  SD.begin(10, 11, 12, 13);
+  if (!SD.begin(chipSelect, 11, 12, 13)) {
+    error(2);
+  }
   delay(1000);
+
+  // Turn off the LEDs to show that we are done, blink them twice
+  digitalWrite(REDLED, LOW);
+  digitalWrite(GRNLED, LOW);
+ 
+  for (int i=0; i < 2; i++) {
+    delay(500);
+    digitalWrite(REDLED, HIGH);
+    digitalWrite(GRNLED, HIGH);
+    delay(500);
+    digitalWrite(REDLED, LOW);
+    digitalWrite(GRNLED, LOW);
+  }
 
   // Dump the serial buffer to trash all of the crap the 
   // tilt meter tells us about our commands and such.
@@ -290,4 +318,27 @@ int calculateDayOfYear(int day, int month, int year) {
   
   doy += day;
   return doy;
+}
+
+void error(uint8_t errno) {
+ /*
+ Blink out error codes based on an integer input.
+ First making sure that all status LEDS are off.
+ */
+ 
+ digitalWrite(REDLED, LOW);
+ digitalWrite(GRNLED, LOW);
+ 
+ while(1) {
+   uint8_t i;
+   for (i=0; i < errno; i++) {
+     digitalWrite(REDLED, HIGH);
+     delay(100);
+     digitalWrite(REDLED, LOW);
+     delay(100);
+   }
+   for (i=errno; i<10; i++) {
+     delay(200);
+   }
+ }
 }
