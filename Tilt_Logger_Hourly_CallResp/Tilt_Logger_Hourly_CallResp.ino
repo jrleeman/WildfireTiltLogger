@@ -204,7 +204,7 @@ void loop() {
         year, month, day, hour, minute, second, gps.satellites());
     uint8_t stringsize = strlen(sz);
     if (stringsize != logfile.write(sz)){
-      error(4);
+      error(3);
     }
     log_float(flat, TinyGPS::GPS_INVALID_F_ANGLE, 10, 6);
     logfile.write(",");
