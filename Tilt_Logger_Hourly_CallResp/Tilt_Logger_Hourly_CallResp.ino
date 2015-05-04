@@ -16,10 +16,9 @@
 	https://github.com/jrleeman/WildfireTiltLogger
 
 */
-// Tested working code 10:32 AM 4/22/15
+// Tested working code 4:09 PM 5/4/15
 // TODO:
-// - Add watchdog
-// - Add newline after GPS if no tilt data and throw error light
+// - Fix watchdog
 
 #include <WildFire.h>
 #include <SPI.h>
