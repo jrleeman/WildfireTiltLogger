@@ -25,6 +25,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <TinyGPS.h>
+#include <TinyWatchdog.h>
 
 // Variables and defines
 #define chipSelect 10
@@ -32,7 +33,7 @@
 #define GRNLED 5
 
 uint8_t index = 0; // Buffer index
-uint8_t ngps = 0; // nubmer GPS sentences
+uint8_t ngps = 0; // number GPS sentences
 int current_hour = 99; // 99 forces us to start a new log at first GPS lock
 char tiltBuffer[100];
 boolean writeTilt = false; // State variable for when we are ready to log
@@ -42,6 +43,7 @@ boolean getTilt = false;
 
 File logfile;
 TinyGPS gps;
+TinyWatchdog tinyWDT;
 WildFire wildfire;
 
 int year;
@@ -49,16 +51,21 @@ byte month, day, hour, minute, second, hundredths;
 unsigned long age;
 
 void setup() {
+  wildfire.begin();
+  
   // Setup the LED pins and the CS pin for the SD card as output
   pinMode(REDLED, OUTPUT);
   pinMode(GRNLED, OUTPUT);
   pinMode(10, OUTPUT);
+  // Set the pins the GPS sees as inputs so we can talk to it on Serial1
+  pinMode(7, INPUT);
+  pinMode(8, INPUT);
   
   // Turn on the LEDs to show that we are in setup
   digitalWrite(REDLED, HIGH);
   digitalWrite(GRNLED, HIGH);
   
-  wildfire.begin();
+  
 
   // Start up the serial ports 
   Serial.begin(9600);
@@ -95,6 +102,8 @@ void setup() {
   }
   delay(1000);
 
+  
+  tinyWDT.begin(500, 4e000);
   // Turn off the LEDs to show that we are done, blink them twice
   digitalWrite(REDLED, LOW);
   digitalWrite(GRNLED, LOW);
@@ -123,6 +132,8 @@ void setup() {
 
 void loop() {
   // Read a GPS sentence if there is one avaliable
+  tinyWDT.pet();
+  
   bool newData = false;
    while (Serial1.available())
     {
