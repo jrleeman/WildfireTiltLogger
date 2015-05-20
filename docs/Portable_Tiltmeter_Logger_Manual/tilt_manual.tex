@@ -77,37 +77,47 @@ This kit contains all components needed to record two axis tilt meter data in th
 \item USB key of firmware/instructions x 1
 \end{enumerate}
 
+\newpage
 \section{Setup}
 Carefully follow these instructions to ensure a reliable and useful field deployment of the portable tilt meter package. 
 
 \begin{enumerate}
 \item Select a location on stable, flat ground.
 \item Place the equipment case and remove the cables, GPS antenna, and tilt meter unit.
-\item Remove the foam block that is under the tilt meter for shipping.
 \item Place the tilt meter on the acrylic plate and level with the bubble level. Loosen the brass lock nuts if needed.
-\item Connect the computer link cable to power and the serial port of a computer. Connect the cable to the tilt meter.
-\item Open a serial terminal utility and connect to the tilt meter (9800,N,0,1).
-\item Enter *9900XY into the terminal and press return (if no response make sure your terminal is sending <CR><LF> at the end of the serial sequence).
-\item The tilt meter should return the x tilt, y tilt, temperature, and its serial number.
-\item Adjust the level of the until and repeat the process above until the unit is nearly centered in the measurement range. Use the lock nuts to secure the setting.
-\item Remove power and disconnect the computer cable. 
+\item \emph{Optional:} Connect the computer link cable to power and the serial port of a computer. Connect the cable to the tilt meter.
+\item \emph{Optional:} Open a serial terminal utility and connect to the tilt meter (9800,N,0,1).
+\item \emph{Optional:} Enter *9900XY into the terminal and press return (if no response make sure your terminal is sending $<$CR$><$LF$>$ at the end of the serial sequence).
+\item \emph{Optional:} The tilt meter should return the x tilt, y tilt, temperature, and its serial number.
+\item \emph{Optional:} Adjust the level of the until and repeat the process above until the unit is nearly centered in the measurement range. Use the lock nuts to secure the setting.
+\item \emph{Optional:} Remove power and disconnect the computer cable. 
 \item Connect the tilt meter cable to the tilt port on the logger.
 \item Open the logging unit with the two latches.
-\item Ensure that the GPS and tilt serial switches and in the positions shown in figure \ref{switch_positions}.
-\item Connect the GPS antenna to the antenna connector on the logger and place it ouside the box.
-\item Insert a formatted (FAT32) SD card into the top SD card holder (Fig.\ref{labeled_box}).
-\item Check that a backup battery is inserted into the coincell holder (Fig.\ref{labeled_box}). This battery lasts for years and is a CR1220. 
+\item Ensure that the GPS and tilt serial switches and in the positions shown in figure \ref{labeled_box}.
+\item Connect the GPS antenna to the antenna connector on the logger and place it outside the box.
+\item Insert a formatted (FAT32) SD card into the top SD card holder.
+\item Check that a backup battery is inserted into the coin cell battery holder. This battery lasts for years and is a CR1220. 
 \item Connect the power cable to a 7-23 VDC power source (battery, etc).
 \item Connect the power cable to the logging box. 
-\item Large red and green LEDs will illuminate to indicate the the logger is completing setup routines. These lights flash twice to verify that setup was completed successfully.
+\item Large red and green LEDs will illuminate to indicate the the logger is completing setup routines. These lights flash twice to verify that setup was completed successfully (about 20-30 seconds).
 \item The small yellow LED labeled L13 should flash once per second. The green PWR LED should be on solid. The red FIX led should flash approximately once every 15 seconds once GPS lock is established. If any other lights are on or flashing the unit is not functioning correctly. Check the error codes.
 \item Close and seal the logging unit.
 \item Carefully route the power and GPS antenna cables though the slots in the case. Seal with a small strip of putty.
-\item Place the foam block that was under the tilt meter on top of it for thermal insulation.
+\item Place the foam block on top of it for thermal insulation.
 \item Stowe all extra cables.
 \item Close the case gently so the unit stays level and lock the case shut. Deployment is complete.
 \end{enumerate}
 
+% Figure %
+\begin{figure}
+	\centering
+		\includegraphics[scale=0.1]{board.jpg}
+   	\caption{Essesntial controls and indicators in the logger box.}
+  	\label{labeled_box}
+\end{figure}
+% End Figure %
+
+\newpage
 \section{Take Down}
 Take down procedures render the unit safe and prepare it for shipping. Failure to follow these instructions could result in damage or data loss.
 
@@ -116,15 +126,15 @@ Take down procedures render the unit safe and prepare it for shipping. Failure t
 \item Remove power from the logging unit by disconnecting the power cable.
 \item Disconnect the power cable from the power source.
 \item Disconnect the tilt meter cable from the logging unit.
-\item Remove excess cables, then remove the foam block over the tilt meter.
-\item Remove the tilt meter, replace the foam block, then replace the tilt meter.
-\item Disconnect the GPS antenna from the logging unit.
+\item Remove excess cables
+\item Disconnect the GPS antenna from the logging unit. Stowe.
 \item Open the logging unit and recover the SD card with your data on it.
 \item Seal and replace the logging unit.
 \item Carefully wind, bind, and replace all cables and materials.
 \item Seal the box. Take down is complete.
 \end{enumerate}
 
+\newpage
 \section{Error Codes}
 
 \begin{center}
