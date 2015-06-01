@@ -10,7 +10,7 @@
 
 	Created 14 04 2015
 	By John R. Leeman
-	Modified 22 04 2015
+	Modified 31 05 2015
 	By John R. Leeman
 
 	https://github.com/jrleeman/WildfireTiltLogger
