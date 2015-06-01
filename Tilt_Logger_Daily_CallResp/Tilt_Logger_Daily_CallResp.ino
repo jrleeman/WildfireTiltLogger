@@ -16,9 +16,7 @@
 	https://github.com/jrleeman/WildfireTiltLogger
 
 */
-// Tested working code 4:09 PM 5/4/15
-// TODO:
-// - Fix watchdog
+// Tested working code 5/31/15
 
 #include <WildFire.h>
 #include <SPI.h>
@@ -51,6 +49,7 @@ byte month, day, hour, minute, second, hundredths;
 unsigned long age;
 
 void setup() {
+  delay(1000);
   wildfire.begin();
   tinyWDT.begin(10, 30000);
   
