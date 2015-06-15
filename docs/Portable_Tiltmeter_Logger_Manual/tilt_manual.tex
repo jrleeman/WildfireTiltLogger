@@ -69,13 +69,21 @@ This kit contains all components needed to record two axis tilt meter data in th
 \item Unit power cord x 1
 \item GPS Antenna x 1
 \item Tilt meter logger x 1
-\item Spare GPS/RTC battery x 1
 \item Tilt meter sensor x 1
 \item Tilt meter computer connection cable x1
-\item Micro SD Card x 1
+\item Micro SD Card and Adapter x 1
+\item Sealing putty x 1
 \item Instruction Manual x 1
-\item USB key of firmware/instructions x 1
 \end{enumerate}
+
+% Figure %
+\begin{figure}
+	\centering
+		\includegraphics[scale=0.1]{kit_annotated.jpg}
+   	\caption{Kit contents essential for a deployment.}
+  	\label{kit}
+\end{figure}
+% End Figure %
 
 \newpage
 \section{Setup}
@@ -83,8 +91,8 @@ Carefully follow these instructions to ensure a reliable and useful field deploy
 
 \begin{enumerate}
 \item Select a location on stable, flat ground.
-\item Place the equipment case and remove the cables, GPS antenna, and tilt meter unit.
-\item Place the tilt meter on the acrylic plate and level with the bubble level. Loosen the brass lock nuts if needed.
+\item Place the equipment case and remove the cables and GPS antenna.
+\item Level the tilt meter with the bubble level. Loosen the brass lock nuts if needed. Tighten lock nuts finger tight when level. Recheck level!
 \item \emph{Optional:} Connect the computer link cable to power and the serial port of a computer. Connect the cable to the tilt meter.
 \item \emph{Optional:} Open a serial terminal utility and connect to the tilt meter (9800,N,0,1).
 \item \emph{Optional:} Enter *9900XY into the terminal and press return (if no response make sure your terminal is sending $<$CR$><$LF$>$ at the end of the serial sequence).
@@ -97,14 +105,13 @@ Carefully follow these instructions to ensure a reliable and useful field deploy
 \item Connect the GPS antenna to the antenna connector on the logger and place it outside the box.
 \item Insert a formatted (FAT32) SD card into the top SD card holder.
 \item Check that a backup battery is inserted into the coin cell battery holder. This battery lasts for years and is a CR1220. 
-\item Connect the power cable to a 7-23 VDC power source (battery, etc).
+\item Connect the power cable to a 7-23 VDC power source (battery, etc). Black to ground and white to positive. DO NOT REVERSE THESE!
 \item Connect the power cable to the logging box. 
-\item Large red and green LEDs will illuminate to indicate the the logger is completing setup routines. These lights flash twice to verify that setup was completed successfully (about 20-30 seconds).
+\item Large red and green LEDs will illuminate to indicate the the logger is completing setup routines. These lights flash twice to verify that setup was completed successfully (about 20-30 seconds). This process may repeat if the GPS lock takes longer than 30 seconds. 
 \item The small yellow LED labeled L13 should flash once per second. The green PWR LED should be on solid. The red FIX led should flash approximately once every 15 seconds once GPS lock is established. If any other lights are on or flashing the unit is not functioning correctly. Check the error codes.
-\item Close and seal the logging unit.
-\item Carefully route the power and GPS antenna cables though the slots in the case. Seal with a small strip of putty.
-\item Place the foam block on top of it for thermal insulation.
-\item Stowe all extra cables.
+\item Close and seal the logging electronics (white) box.
+\item Carefully route the power and GPS antenna cables though the slots in the case. Seal with a small strip of putty if necessary.
+\item Stow all extra cables.
 \item Close the case gently so the unit stays level and lock the case shut. Deployment is complete.
 \end{enumerate}
 
@@ -112,7 +119,7 @@ Carefully follow these instructions to ensure a reliable and useful field deploy
 \begin{figure}
 	\centering
 		\includegraphics[scale=0.1]{board.jpg}
-   	\caption{Essesntial controls and indicators in the logger box.}
+   	\caption{Essential controls and indicators in the logger box.}
   	\label{labeled_box}
 \end{figure}
 % End Figure %
@@ -126,8 +133,7 @@ Take down procedures render the unit safe and prepare it for shipping. Failure t
 \item Remove power from the logging unit by disconnecting the power cable.
 \item Disconnect the power cable from the power source.
 \item Disconnect the tilt meter cable from the logging unit.
-\item Remove excess cables
-\item Disconnect the GPS antenna from the logging unit. Stowe.
+\item Disconnect the GPS antenna from the logging unit. Stow.
 \item Open the logging unit and recover the SD card with your data on it.
 \item Seal and replace the logging unit.
 \item Carefully wind, bind, and replace all cables and materials.
@@ -146,11 +152,11 @@ Take down procedures render the unit safe and prepare it for shipping. Failure t
     \hline
     2 red flashes &  Cannot start SD card, check card and formatting.\\
     \hline
-    3 red flashes &  Error writing GPS data to SD card\\
+    3 red flashes &  Error writing GPS data to SD card.\\
     \hline
-    4 red flashes &  Error writing tilt data to SD card\\
+    4 red flashes &  Error writing tilt data to SD card.\\
     \hline
-    red and green simultaneous flashes &  Logging GPS, but no tilt meter data is being received\\
+    red and green simultaneous flashes &  Check serial switch positions.\\
     \hline
     \end{tabular}
 \end{center}
